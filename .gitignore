@@ -5,6 +5,9 @@
 app.iml
 out/
 
+# DB
+db*
+
 # Compiled class file
 *.class
 

@@ -53,7 +53,14 @@ public class PimController {
                     this.memberService.saveFile(); // memberdb.txt 에 저장
                     break;
                 case 1: // 등록;
-                    this.member = this.createMember(this.tuiView.inputForRegister()); // 멤버 등록 메서드 실행
+                    try {
+                        // 잘못된 이메일 입력 시 에러가 발생되어 catch 구문으로 넘어간다.
+                        this.member = this.createMember(this.tuiView.inputForRegister()); // 멤버 등록 메서드 실행
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+
                     try {
                         // 멤버 등록 중 이메일이 중복된게 존재하면 에러가 발생하여 catch 구문으로 넘어간다.
                         this.memberService.postMember(this.member);
@@ -62,14 +69,15 @@ public class PimController {
                         continue;
                     }
 
+                    this.memberView.printHeader();
                     this.memberView.printOne(this.member);
                     this.memberView.printMsg("회원 등록에 성공했습니다.");
+                    this.memberService.saveFile(); // memberdb.txt 에 저장
                     break;
                 case 2: // 로그인;
-                    String id = sc.next();
-                    String pw = sc.next();
-
-                    this.member = (Member) this.memberService.login(id, pw);
+                    this.member = (Member) this.memberService.login(
+                            this.tuiView.inputToString("email"),
+                            this.tuiView.inputToString("password"));
                     isLogin = this.isLogined(this.member); // 로그인 여부 검증
                     // isRoot = this.isRoot(this.member); // 관리자 여부 검증
 
@@ -81,15 +89,17 @@ public class PimController {
                         this.memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
                     break;
                 case 3: // 정보조회;
+                    this.memberView.printHeader();
                     // printOne : 하나의 member 정보 출력
                     this.memberView.printOne(this.memberService.getMember(
                             (Member) this.session.get("member")));
                     this.memberView.printMsg("정보조회를 성공했습니다.");
                     break;
                 case 4: // 정보수정;
-                    this.member = this.updateMember(sc, sessionMember);
+                    this.member = this.updateMember(this.tuiView.inputForUpdate());
 
                     if (this.memberService.putMember(this.member) > 0) {
+                        this.memberView.printHeader();
                         this.memberView.printOne(this.member);
                         this.memberView.printMsg("정보수정을 성공했습니다.");
                     } else
@@ -104,10 +114,17 @@ public class PimController {
                     this.memberView.printMsg("로그아웃을 성공했습니다.");
                     break;
                 case 6: // 회원탈퇴;
-                    this.member = new Member();
-                    this.memberService.deleteMember(this.member);
-                    System.out.println("탈퇴가 되었습니다. ");
-                    //    System.out.println("탈퇴에 실패하였습니다. ");
+                    int deletedFlag = this.memberService.deleteMember(sessionMember);
+                    if (deletedFlag > 0) {
+                        System.out.println("탈퇴가 되었습니다. ");
+                        this.memberService.saveFile(); // memberdb.txt 에 저장
+
+                        if(this.session.get("member") != null) {
+                            // 로그아웃
+                            this.session.remove("member");
+                        }
+                    }
+                    else System.out.println("탈퇴에 실패하였습니다. ");
                     break;
                 case 7: // 회원목록조회;
                     this.memberView.printList(this.memberService.getMemberList());
@@ -120,7 +137,7 @@ public class PimController {
                     this.memberView.printList(memberList);
                     break;
                 case 9: // 이름 내림차순 정렬;
-                    String order = sc.next();
+                    String order = this.tuiView.inputToString("order");
                     memberList = this.memberService.sortByName(order);
                     if (memberList != null)
                         this.memberView.printList(memberList);
@@ -161,7 +178,7 @@ public class PimController {
     /**
      * createMember 입력한 값들로 멤버를 생성하여 반환한다.
      *
-     * @param sc 스캐너
+     * @param inputtedMember 플레이어가 직접 입력한 회원 정보
      * @return 생성된 멤버
      */
     private Member createMember(HashMap<String, String> inputtedMember) {
@@ -180,18 +197,18 @@ public class PimController {
     /**
      * updateMember 입력한 값들로 멤버를 수정하여 반환한다.
      *
-     * @param sc 스캐너
+     * @param inputtedMember 플레이어가 직접 입력한 회원 정보
      * @return 생성된 멤버(실제로는 멤버를 생성하여 반환하지만, 결국 DB에 저장할 때는 같은 ID를 가진 데이터가 이미 있으므로 해당 값의 내용을 변경하게 된다)
      */
-    private Member updateMember(Scanner sc, Member sessionMember) {
+    private Member updateMember(HashMap<String, String> inputtedMember) {
         Member member = new Member();
 
-        member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
-        member.setEmail(sessionMember.getEmail()); // email 변경 불가
-        member.setPw(sc.next());
-        member.setName(sc.next());
-        member.setPhone(sc.next());
-        member.setAddress(sc.next());
+//        member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
+        member.setEmail(((Member) this.session.get("member")).getEmail()); // email 변경 불가
+        member.setPw(inputtedMember.get("password"));
+        member.setName(inputtedMember.get("name"));
+        member.setPhone(inputtedMember.get("phone"));
+        member.setAddress(inputtedMember.get("address"));
 
         return member;
     }

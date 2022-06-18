@@ -13,14 +13,14 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     public List<T> memberList = null;
     public MemberRepositoryImpl() {
         // Array 배열 : (정적인 크기를 가진) 동일한 자료형을 인덱스를 활용하여 접근하는 객체
-        memberList = new ArrayList<T>(); // Array + List : (동적 - 늘어남) 배열과 리스트 장점
+        this.memberList = new ArrayList<T>(); // Array + List : (동적 - 늘어남) 배열과 리스트 장점
     }
     @Override
     public int create(T member) {
         int ret = 0; // 실패
         try {
             ((Member) member).setId(memberList.size()); // 아이디 번호 자동 증가 기능 (AUTO_INCREMENT)
-            memberList.add((T) member); // 형변환
+            this.memberList.add((T) member); // 형변환
             ret = 1; // 성공
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -35,7 +35,7 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
 
     @Override
     public T readByEmail(T member) {
-        for(T m : memberList) { // memberList 객체에 존재하는지 확인
+        for(T m : this.memberList) { // memberList 객체에 존재하는지 확인
             if (((Member) m).getEmail().equals(((Member) member).getEmail())
                     && ((Member) m).getPw().equals(((Member) member).getPw()))
                 return m;
@@ -84,9 +84,9 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     public int update(T member) {
         int ret = 0; // 실패
         int idx = 0;
-        for(T m : memberList) {
+        for(T m : this.memberList) {
             if(((Member) m).getEmail().equals(((Member) member).getEmail())) {
-                memberList.set(idx, member);
+                this.memberList.set(idx, member);
                 ret++;
             }
             idx++;
@@ -96,7 +96,15 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
 
     @Override
     public int delete(T member) {
-        return 0;
+        try {
+            this.memberList = this.memberList.stream()
+                    .filter(m -> !((Member) m).getEmail().equals(((Member) member).getEmail()))
+                    .collect(Collectors.toList());
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override

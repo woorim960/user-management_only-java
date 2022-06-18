@@ -16,7 +16,7 @@ public class MemberServiceImpl<T> implements MemberService<T> {
     // Object temporary = null;
 
     public MemberServiceImpl(String db) {
-        memberRepository = new MemberRepositoryImpl<>();
+        this.memberRepository = new MemberRepositoryImpl<>();
         this.memberdb = db;
     }
 
@@ -27,7 +27,7 @@ public class MemberServiceImpl<T> implements MemberService<T> {
         T member = (T) new Member();
         ((Member) member).setEmail(email);
         ((Member) member).setPw(pw);
-        return memberRepository.readByEmail(member);
+        return this.memberRepository.readByEmail(member);
     }
 
     @Override
@@ -45,22 +45,22 @@ public class MemberServiceImpl<T> implements MemberService<T> {
 
     @Override
     public T getMember(T member) {
-        return memberRepository.readByEmail(member);
+        return this.memberRepository.readByEmail(member);
     }
 
     @Override
     public int putMember(T member) {
-        return memberRepository.update(member);
+        return this.memberRepository.update(member);
     }
 
     @Override
     public int deleteMember(T member) {
-        return 0;
+        return this.memberRepository.delete(member);
     }
 
     @Override
     public List<T> getMemberList() {
-        return memberRepository.getMemberList();
+        return this.memberRepository.getMemberList();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class MemberServiceImpl<T> implements MemberService<T> {
         if(file.canRead()) {
             try {
                 MemberFileReader<T> mfr = new MemberFileReader<>(file);
-                memberRepository.setMemberList(mfr.readMember()); // 파일 -> memberList
+                this.memberRepository.setMemberList(mfr.readMember()); // 파일 -> memberList
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -110,10 +110,10 @@ public class MemberServiceImpl<T> implements MemberService<T> {
 
     @Override
     public void saveFile() { // throws : 예외 전파, throw : 예외 발생
-        File file = new File(memberdb);
+        File file = new File(this.memberdb);
         try  {
             MemberFileWriter<Member> mfw = new MemberFileWriter<>(file);
-            mfw.saveMember((List<Member>) memberRepository.getMemberList());
+            mfw.saveMember((List<Member>) this.memberRepository.getMemberList());
         } catch(IOException e) { // 예외를 직접 처리, unchecked exception
             e.printStackTrace();
         }

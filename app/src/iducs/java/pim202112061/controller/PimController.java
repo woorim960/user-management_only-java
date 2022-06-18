@@ -144,7 +144,9 @@ public class PimController {
                     int pageNo = sc.nextInt();
                     int perCount = sc.nextInt();
                     memberList = this.memberService.paginateByPerPage(pageNo, perCount);
-                    this.memberView.printList(memberList);
+                    if (memberList != null)
+                        this.memberView.printList(memberList);
+                    break;
                 default:
                     msg = "입력 코드 확인 :";
                     break;

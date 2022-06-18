@@ -67,8 +67,17 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     }
 
     @Override
-    public List<T> readListByPerPage(int page, int perPage) {
-        return this.memberList;
+    public List<T> readListByPerPage(int page, int perPage) throws Exception {
+        int startId = (page - 1) * perPage;
+        int endId = startId + perPage;
+        endId = endId <= this.memberList.size() ? endId : this.memberList.size();
+
+        try {
+            return this.memberList.subList(startId, endId);
+        } catch(Exception e) {
+            throw new Exception("해당 페이지는 비어있습니다.");
+        }
+
     }
 
     @Override

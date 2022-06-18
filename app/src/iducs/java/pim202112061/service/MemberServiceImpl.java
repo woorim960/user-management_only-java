@@ -80,7 +80,13 @@ public class MemberServiceImpl<T> implements MemberService<T> {
 
     @Override
     public List<T> paginateByPerPage(int pageNo, int perPage) {
-        return this.memberRepository.readListByPerPage(pageNo, perPage);
+        try {
+            return this.memberRepository.readListByPerPage(pageNo, perPage);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
     @Override

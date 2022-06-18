@@ -47,15 +47,12 @@ public class PimController {
 
             this.tuiView.showMenu(isLogin, isRoot);
 
-            String msg = "";
             menu = sc.nextInt(); // 숫자 입력 후 엔터키
             switch(menu) {
-                case 0:
-                    msg = "종료";
+                case 0: // 종료;
                     this.memberService.saveFile(); // memberdb.txt 에 저장
                     break;
-                case 1:
-                    msg = "등록";
+                case 1: // 등록;
                     this.member = this.createMember(sc); // 멤버 등록 메서드 실행
                     try {
                         // 멤버 등록 중 이메일이 중복된게 존재하면 에러가 발생하여 catch 구문으로 넘어간다.
@@ -66,10 +63,9 @@ public class PimController {
                     }
 
                     this.memberView.printOne(this.member);
-                    this.memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printMsg("회원 등록에 성공했습니다.");
                     break;
-                case 2:
-                    msg = "로그인";
+                case 2: // 로그인;
                     String id = sc.next();
                     String pw = sc.next();
 
@@ -80,75 +76,63 @@ public class PimController {
                     if (isLogin) {
                         // 로그인이 됐으면 로그인 정보를 세션에 저장한다.
                         this.session.put("member", this.member);
-                        this.memberView.printMsg(msg + "를 성공했습니다.");
+                        this.memberView.printMsg("로그인이 성공했습니다.");
                     } else
                         this.memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
                     break;
-                case 3:
-                    msg = "정보조회";
+                case 3: // 정보조회;
                     // printOne : 하나의 member 정보 출력
                     this.memberView.printOne(this.memberService.getMember(
                             (Member) this.session.get("member")));
-                    this.memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printMsg("정보조회를 성공했습니다.");
                     break;
-                case 4:
-                    msg = "정보수정";
+                case 4: // 정보수정;
                     this.member = this.updateMember(sc, sessionMember);
 
-                    if(this.memberService.putMember(this.member) > 0) {
+                    if (this.memberService.putMember(this.member) > 0) {
                         this.memberView.printOne(this.member);
-                        this.memberView.printMsg(msg + "를 성공했습니다.");
+                        this.memberView.printMsg("정보수정을 성공했습니다.");
                     } else
                         System.out.println("수정에 실패하였습니다.");
                     break;
-                case 5:
-                    msg = "로그아웃";
+                case 5: // 로그아웃;
                     this.memberService.saveFile();
                     this.memberService.readFile();
                     if(this.session.get("member") != null) {
                         this.session.remove("member");
                     }
-                    this.memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printMsg("로그아웃을 성공했습니다.");
                     break;
-                case 6:
-                    msg = "회원탈퇴";
+                case 6: // 회원탈퇴;
                     this.member = new Member();
                     this.memberService.deleteMember(this.member);
                     System.out.println("탈퇴가 되었습니다. ");
                     //    System.out.println("탈퇴에 실패하였습니다. ");
                     break;
-                case 7:
-                    msg = "회원목록조회";
+                case 7: // 회원목록조회;
                     this.memberView.printList(this.memberService.getMemberList());
-                    this.memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printMsg("회원 목록 조회를 성공했습니다.");
                     break;
-                case 8:
-                    msg = "전화번호 검색";
-
+                case 8: // 전화번호 검색;
                     Member member = new Member();
                     member.setPhone(sc.next());
                     List<Member> memberList = this.memberService.findMemberByPhone(member);
                     this.memberView.printList(memberList);
                     break;
-                case 9:
-                    msg = "이름 내림차순 정렬";
-
+                case 9: // 이름 내림차순 정렬;
                     String order = sc.next();
                     memberList = this.memberService.sortByName(order);
                     if (memberList != null)
                         this.memberView.printList(memberList);
                     break;
-                case 10:
-                    msg = "범위 지정 page perCount";
-
+                case 10: // 범위 지정 page perCount;
                     int pageNo = sc.nextInt();
                     int perCount = sc.nextInt();
                     memberList = this.memberService.paginateByPerPage(pageNo, perCount);
                     if (memberList != null)
                         this.memberView.printList(memberList);
                     break;
-                default:
-                    msg = "입력 코드 확인 :";
+                default: // "입력 코드 확인 :";
                     break;
             }
         } while(menu != 0);

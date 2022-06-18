@@ -47,7 +47,7 @@ public class PimController {
 
             this.tuiView.showMenu(isLogin, isRoot);
 
-            menu = sc.nextInt(); // 숫자 입력 후 엔터키
+            menu = this.tuiView.inputMenu();
             switch(menu) {
                 case 0: // 종료;
                     this.memberService.saveFile(); // memberdb.txt 에 저장

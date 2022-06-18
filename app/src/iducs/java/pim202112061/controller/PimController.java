@@ -40,89 +40,85 @@ public class PimController {
 
         int menu = 0;
         do {
-            Member sessionMember = (Member) session.get("member");
+            Member sessionMember = (Member) this.session.get("member");
             isLogin = this.isLogined(sessionMember); // 로그인 여부 검증
             isRoot = this.isRoot(sessionMember); // 관리자 여부 검증
 
+            this.tuiView.showMenu(isLogin, isRoot);
+
             String msg = "";
-            tuiView.showMenu(isLogin, isRoot);
             menu = sc.nextInt(); // 숫자 입력 후 엔터키
             switch(menu) {
                 case 0:
                     msg = "종료";
-                    memberService.saveFile(); // memberdb.txt 에 저장
+                    this.memberService.saveFile(); // memberdb.txt 에 저장
                     break;
                 case 1:
                     msg = "등록";
-                    member = new Member();
-                    member.setId(sc.nextLong()); // Long
-                    member.setEmail(sc.next()); // String
-                    member.setPw(sc.next());
-                    member.setName(sc.next());
-                    member.setPhone(sc.next());
-                    member.setAddress(sc.next());
-                    memberService.postMember(member);
-                    memberView.printOne(member);
-                    memberView.printMsg(msg + "를 성공했습니다.");
+                    this.member = this.createMember(sc); // 멤버 등록 메서드 실행
+                    this.memberService.postMember(this.member);
+                    this.memberView.printOne(this.member);
+                    this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
                 case 2:
                     msg = "로그인";
                     String id = sc.next();
                     String pw = sc.next();
-                    member = (Member) memberService.login(id, pw);
-                    if(member != null) {
+
+                    this.member = (Member) this.memberService.login(id, pw);
+                    if(this.member != null) {
                         isLogin = true;
-                        if(member.getEmail().contains("admin"))
+                        if(this.member.getEmail().contains("admin"))
                             isRoot = true;
-                        session.put("member", member);
-                        memberView.printMsg(msg + "를 성공했습니다.");
+                        this.session.put("member", this.member);
+                        this.memberView.printMsg(msg + "를 성공했습니다.");
                     }
                     else
-                        memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
+                        this.memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
                     break;
                 case 3:
                     msg = "정보조회";
                     // printOne : 하나의 member 정보 출력
-                    memberView.printOne(memberService.getMember(
-                            (Member) session.get("member")));
-                    memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printOne(this.memberService.getMember(
+                            (Member) this.session.get("member")));
+                    this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
                 case 4:
                     msg = "정보수정";
-                    member = new Member();
-                    member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
-                    member.setEmail(sessionMember.getEmail()); // email 변경 불가
-                    member.setPw(sc.next());
-                    member.setName(sc.next());
-                    member.setPhone(sc.next());
-                    member.setAddress(sc.next());
-                    if(memberService.putMember(member) > 0) {
-                        memberView.printOne(member);
-                        memberView.printMsg(msg + "를 성공했습니다.");
+                    this.member = new Member();
+                    this.member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
+                    this.member.setEmail(sessionMember.getEmail()); // email 변경 불가
+                    this.member.setPw(sc.next());
+                    this.member.setName(sc.next());
+                    this.member.setPhone(sc.next());
+                    this.member.setAddress(sc.next());
+                    if(this.memberService.putMember(this.member) > 0) {
+                        this.memberView.printOne(this.member);
+                        this.memberView.printMsg(msg + "를 성공했습니다.");
                     }
                     else
                         System.out.println("수정에 실패하였습니다. ");
                     break;
                 case 5:
                     msg = "로그아웃";
-                    memberService.saveFile();
-                    memberService.readFile();
-                    if(session.get("member") != null) {
-                        session.remove("member");
+                    this.memberService.saveFile();
+                    this.memberService.readFile();
+                    if(this.session.get("member") != null) {
+                        this.session.remove("member");
                     }
-                    memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
                 case 6:
                     msg = "회원탈퇴";
-                    member = new Member();
-                    memberService.deleteMember(member);
+                    this.member = new Member();
+                    this.memberService.deleteMember(this.member);
                     System.out.println("탈퇴가 되었습니다. ");
                     //    System.out.println("탈퇴에 실패하였습니다. ");
                     break;
                 case 7:
                     msg = "회원목록조회";
-                    memberView.printList(memberService.getMemberList());
-                    memberView.printMsg(msg + "를 성공했습니다.");
+                    this.memberView.printList(this.memberService.getMemberList());
+                    this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
                 default:
                     msg = "입력 코드 확인 :"; break;
@@ -136,5 +132,18 @@ public class PimController {
 
     private boolean isRoot(Member sessionMember) {
         return (sessionMember != null) && sessionMember.getEmail().contains("admin") ? true : false;
+    }
+
+    private Member createMember(Scanner sc) {
+        Member member = new Member();
+
+        member.setId(sc.nextLong()); // Long
+        member.setEmail(sc.next()); // String
+        member.setPw(sc.next());
+        member.setName(sc.next());
+        member.setPhone(sc.next());
+        member.setAddress(sc.next());
+
+        return member;
     }
 }

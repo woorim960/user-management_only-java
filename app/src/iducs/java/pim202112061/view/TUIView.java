@@ -1,5 +1,6 @@
 package iducs.java.pim202112061.view;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class TUIView { //TUI : Text User Interface, CUI(Character UI)
@@ -45,4 +46,22 @@ public class TUIView { //TUI : Text User Interface, CUI(Character UI)
 
         return menu;
     }
+
+    public HashMap<String, String> inputForRegister() {
+        HashMap<String, String> member = new HashMap<>();
+
+        System.out.println("이메일을 입력하시오. >");
+        member.put("email", this.sc.next());
+        System.out.println("비밀번호를 입력하시오. >");
+        member.put("password", this.sc.next());
+        System.out.println("이름을 입력하시오. >");
+        member.put("name", this.sc.next());
+        System.out.println("핸드폰 번호를 입력하시오. >");
+        member.put("phone", this.sc.next());
+        System.out.println("주소를 입력하시오. >");
+        member.put("address", this.sc.next());
+
+        return member;
+    }
 }
+

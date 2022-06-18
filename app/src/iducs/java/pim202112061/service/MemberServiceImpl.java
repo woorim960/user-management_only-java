@@ -62,7 +62,7 @@ public class MemberServiceImpl<T> implements MemberService<T> {
 
     @Override
     public List<T> findMemberByPhone(T member) {
-        return null;
+        return this.memberRepository.readByPhone(member);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package iducs.java.pim202112061.service;
 
+import iducs.java.pim202112061.domain.Member;
+
 import java.util.List;
 
 public interface MemberService<T> {

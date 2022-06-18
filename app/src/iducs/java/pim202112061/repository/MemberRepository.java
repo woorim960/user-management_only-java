@@ -1,5 +1,7 @@
 package iducs.java.pim202112061.repository;
 
+import iducs.java.pim202112061.domain.Member;
+
 import java.util.List;
 
 public interface MemberRepository<T> {
@@ -8,6 +10,7 @@ public interface MemberRepository<T> {
     T readById(T member);  // 정보조회 - id 기준
     T readByEmail(T member); // 정보조회 - email 기준
     List<T> readList(); // 목록 조회
+    List<T> readByPhone(T member); // 전화번호로 검색
     int update(T member); // 수정
     int delete(T member); // 탈퇴
 

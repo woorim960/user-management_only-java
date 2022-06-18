@@ -4,6 +4,7 @@ import iducs.java.pim202112061.domain.Member;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     // <> : Generic (제너릭) 1. 컴파일 시점에 유형을 확인 2. 사용시 형변환을 줄여줌
@@ -45,6 +46,13 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     @Override
     public List<T> readList() {
         return memberList;
+    }
+
+    @Override
+    public List<T> readByPhone(T member) {
+        return this.memberList.stream()
+                .filter(m -> ((Member) m).getPhone().equals(((Member) member).getPhone()))
+                .collect(Collectors.toList());
     }
 
     @Override

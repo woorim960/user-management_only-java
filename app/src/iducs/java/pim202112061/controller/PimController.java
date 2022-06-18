@@ -7,6 +7,7 @@ import iducs.java.pim202112061.view.MemberView;
 import iducs.java.pim202112061.view.TUIView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -67,7 +68,7 @@ public class PimController {
 
                     this.member = (Member) this.memberService.login(id, pw);
                     isLogin = this.isLogined(this.member); // 로그인 여부 검증
-                    isRoot = this.isRoot(this.member); // 관리자 여부 검증
+                    // isRoot = this.isRoot(this.member); // 관리자 여부 검증
 
                     if (isLogin) {
                         // 로그인이 됐으면 로그인 정보를 세션에 저장한다.
@@ -114,8 +115,17 @@ public class PimController {
                     this.memberView.printList(this.memberService.getMemberList());
                     this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
+                case 8:
+                    msg = "전화번호 검색";
+
+                    Member member = new Member();
+                    member.setPhone(sc.next());
+                    List<Member> memberList = this.memberService.findMemberByPhone(member);
+                    this.memberView.printList(memberList);
+                    break;
                 default:
-                    msg = "입력 코드 확인 :"; break;
+                    msg = "입력 코드 확인 :";
+                    break;
             }
         } while(menu != 0);
     }

@@ -66,14 +66,13 @@ public class PimController {
                     String pw = sc.next();
 
                     this.member = (Member) this.memberService.login(id, pw);
-                    if(this.member != null) {
-                        isLogin = true;
-                        if(this.member.getEmail().contains("admin"))
-                            isRoot = true;
+                    isLogin = this.isLogined(this.member);
+                    isRoot = this.isRoot(this.member);
+
+                    if (isLogin) {
                         this.session.put("member", this.member);
                         this.memberView.printMsg(msg + "를 성공했습니다.");
-                    }
-                    else
+                    } else
                         this.memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
                     break;
                 case 3:

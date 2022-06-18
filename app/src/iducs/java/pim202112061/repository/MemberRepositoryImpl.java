@@ -71,6 +71,11 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     }
 
     @Override
+    public List<T> readListByPerPage(int page, int perPage) {
+        return this.memberList;
+    }
+
+    @Override
     public int update(T member) {
         int ret = 0; // 실패
         int idx = 0;

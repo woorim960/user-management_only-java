@@ -76,6 +76,11 @@ public class MemberServiceImpl<T> implements MemberService<T> {
     }
 
     @Override
+    public List<T> paginateByPerPage(int pageNo, int perPage) {
+        return this.memberRepository.readListByPerPage(pageNo, perPage);
+    }
+
+    @Override
     public void readFile() {
         File file = new File(memberdb);
         if(file.canRead()) {

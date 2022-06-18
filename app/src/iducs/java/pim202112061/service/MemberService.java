@@ -17,6 +17,7 @@ public interface MemberService<T> {
     List<T> getMemberList(); // 목록조회 : 관리자
     List<T> findMemberByPhone(T member); // 전화번호로 검색
     List<T> sortByName(String order); // 이름으로 정렬된 멤버 검색
+    List<T> paginateByPerPage(int pageNo, int perPage); // 페이지 범위를 지정하여 검색
     // file 사용으로 필요한 연산
     void readFile(); // 파일을 읽어서 memberList 객체에 저장, 시작시
     void saveFile(); // memberList 객체의 내용을 파일에 저장,

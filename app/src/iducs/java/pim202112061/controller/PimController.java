@@ -131,6 +131,13 @@ public class PimController {
                     if (memberList != null)
                         this.memberView.printList(memberList);
                     break;
+                case 10:
+                    msg = "범위 지정 page perCount";
+
+                    int pageNo = sc.nextInt();
+                    int perCount = sc.nextInt();
+                    memberList = this.memberService.paginateByPerPage(pageNo, perCount);
+                    this.memberView.printList(memberList);
                 default:
                     msg = "입력 코드 확인 :";
                     break;

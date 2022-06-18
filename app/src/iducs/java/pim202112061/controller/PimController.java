@@ -66,10 +66,11 @@ public class PimController {
                     String pw = sc.next();
 
                     this.member = (Member) this.memberService.login(id, pw);
-                    isLogin = this.isLogined(this.member);
-                    isRoot = this.isRoot(this.member);
+                    isLogin = this.isLogined(this.member); // 로그인 여부 검증
+                    isRoot = this.isRoot(this.member); // 관리자 여부 검증
 
                     if (isLogin) {
+                        // 로그인이 됐으면 로그인 정보를 세션에 저장한다.
                         this.session.put("member", this.member);
                         this.memberView.printMsg(msg + "를 성공했습니다.");
                     } else

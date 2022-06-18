@@ -2,8 +2,7 @@ package iducs.java.pim202112061.repository;
 
 import iducs.java.pim202112061.domain.Member;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MemberRepositoryImpl<T> implements MemberRepository<T> {
@@ -53,6 +52,22 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
         return this.memberList.stream()
                 .filter(m -> ((Member) m).getPhone().equals(((Member) member).getPhone()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public  List<T> readListByName(String order) throws Exception {
+        order.toLowerCase(); // 모두 소문자로 변경
+
+        switch (order) {
+            case "desc": // 내림차순
+                this.memberList.sort((m1, m2) -> ((Member) m2).getName().compareTo(((Member) m1).getName())); // 내부 요소가 제네릭 타입이므로 '제네릭 배열'.sort(정렬 방식) 으로 해주어야 정렬 가능
+                return this.memberList;
+            case "asc": // 오름차순
+                this.memberList.sort((m1, m2) -> ((Member) m1).getName().compareTo(((Member) m2).getName())); // 내부 요소가 제네릭 타입이므로 '제네릭 배열'.sort(정렬 방식) 으로 해주어야 정렬 가능
+                return this.memberList;
+            default:
+                throw new Exception("desc 혹은 asc 중에서 입력해 주십시오.");
+        }
     }
 
     @Override

@@ -123,6 +123,14 @@ public class PimController {
                     List<Member> memberList = this.memberService.findMemberByPhone(member);
                     this.memberView.printList(memberList);
                     break;
+                case 9:
+                    msg = "이름 내림차순 정렬";
+
+                    String order = sc.next();
+                    memberList = this.memberService.sortByName(order);
+                    if (memberList != null)
+                        this.memberView.printList(memberList);
+                    break;
                 default:
                     msg = "입력 코드 확인 :";
                     break;

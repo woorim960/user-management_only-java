@@ -66,6 +66,16 @@ public class MemberServiceImpl<T> implements MemberService<T> {
     }
 
     @Override
+    public  List<T> sortByName(String order) {
+        try {
+            return this.memberRepository.readListByName(order);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public void readFile() {
         File file = new File(memberdb);
         if(file.canRead()) {

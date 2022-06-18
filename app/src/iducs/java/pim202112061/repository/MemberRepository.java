@@ -11,6 +11,7 @@ public interface MemberRepository<T> {
     T readByEmail(T member); // 정보조회 - email 기준
     List<T> readList(); // 목록 조회
     List<T> readByPhone(T member); // 전화번호로 검색
+    List<T> readListByName(String order) throws Exception; // 이름으로 정렬된 멤버들 검색
     int update(T member); // 수정
     int delete(T member); // 탈퇴
 

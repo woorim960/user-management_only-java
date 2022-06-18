@@ -104,7 +104,7 @@ public class MemberServiceImpl<T> implements MemberService<T> {
         File file = new File(memberdb);
         try  {
             MemberFileWriter<Member> mfw = new MemberFileWriter<>(file);
-            mfw.saveMember((List<Member>) memberRepository.readList());
+            mfw.saveMember((List<Member>) memberRepository.getMemberList());
         } catch(IOException e) { // 예외를 직접 처리, unchecked exception
             e.printStackTrace();
         }

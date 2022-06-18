@@ -43,11 +43,6 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     }
 
     @Override
-    public List<T> readList() {
-        return memberList;
-    }
-
-    @Override
     public List<T> readByPhone(T member) {
         return this.memberList.stream()
                 .filter(m -> ((Member) m).getPhone().equals(((Member) member).getPhone()))
@@ -96,6 +91,8 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
 
     @Override
     public List<T> getMemberList() {
+        // 아이디 순으로 조회
+        this.memberList.sort((m1, m2) -> (int) ((Member) m1).getId() - (int) ((Member) m2).getId()); // 내부 요소가 제네릭 타입이므로 '제네릭 배열'.sort(정렬 방식) 으로 해주어야 정렬 가능
         return this.memberList;
     }
 

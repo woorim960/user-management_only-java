@@ -85,19 +85,13 @@ public class PimController {
                     break;
                 case 4:
                     msg = "정보수정";
-                    this.member = new Member();
-                    this.member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
-                    this.member.setEmail(sessionMember.getEmail()); // email 변경 불가
-                    this.member.setPw(sc.next());
-                    this.member.setName(sc.next());
-                    this.member.setPhone(sc.next());
-                    this.member.setAddress(sc.next());
+                    this.member = this.updateMember(sc, sessionMember);
+
                     if(this.memberService.putMember(this.member) > 0) {
                         this.memberView.printOne(this.member);
                         this.memberView.printMsg(msg + "를 성공했습니다.");
-                    }
-                    else
-                        System.out.println("수정에 실패하였습니다. ");
+                    } else
+                        System.out.println("수정에 실패하였습니다.");
                     break;
                 case 5:
                     msg = "로그아웃";
@@ -139,6 +133,19 @@ public class PimController {
 
         member.setId(sc.nextLong()); // Long
         member.setEmail(sc.next()); // String
+        member.setPw(sc.next());
+        member.setName(sc.next());
+        member.setPhone(sc.next());
+        member.setAddress(sc.next());
+
+        return member;
+    }
+
+    private Member updateMember(Scanner sc, Member sessionMember) {
+        Member member = new Member();
+
+        member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
+        member.setEmail(sessionMember.getEmail()); // email 변경 불가
         member.setPw(sc.next());
         member.setName(sc.next());
         member.setPhone(sc.next());

@@ -16,24 +16,20 @@ public class PimController {
     // ArrayList, Stack
     public static Map<String, Member> session = new HashMap<>(); // static : 메모리 상주
     public static TUIView tuiView = new TUIView();
-
-    private final String MEMBER_DB = "db202112061.txt"; // 파일명, 디렉터리와 파일명으로 식별 가능함, 변수만 봐도 상수임을 알 수 있도록 대문자로만 이루어진 이름으로 변경
-    private Member member = null; // 클래스 내부에서만 접근 가능하도록 private 변수로 변경
-    private MemberService<Member> memberService; // 클래스 내부에서만 접근 가능하도록 private 변수로 변경
-    private MemberView memberView = null; // 클래스 내부에서만 접근 가능하도록 private 변수로 변경
-
+    final String MemberDB = "db202112061.txt"; // 파일명, 디렉터리와 파일명으로 식별 가능함
+    Member member = null;
+    MemberService<Member> memberService;
+    MemberView memberView = null;
     public PimController() {
-        this.memberService = new MemberServiceImpl<>(MEMBER_DB); // 클래수 내부 변수의 참조를 코드만 봐도 알 수 있도록 this 추가
-        this.memberView = new MemberView(); // 클래수 내부 변수의 참조를 코드만 봐도 알 수 있도록 this 추가
+        memberService = new MemberServiceImpl<>(MemberDB);
+        memberView = new MemberView();
     }
 
     public void dispatch() { // 가져오기 : 메뉴보이기, 선택한 메뉴 처리하기, 결과 반환 반복
         boolean isLogin = false; // 지역변수는 선언된 블록이 종료되면 메모리에서 사라짐
-        boolean isRoot = false; // 관리자인지를 검증할 불리언 변수
-
+        boolean isRoot = false;
         Scanner sc = new Scanner(System.in); // 키보드 입력을 받아서 분석 반환
-        this.memberService.readFile(); //파일로 부터 사용자 목록 정보 읽기
-
+        memberService.readFile();//파일로 부터 사용자 목록 정보 읽기
         int menu = 0;
         do {
             Member sessionMember = (Member) session.get("member");

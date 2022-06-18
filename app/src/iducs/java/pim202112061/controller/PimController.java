@@ -120,14 +120,32 @@ public class PimController {
         } while(menu != 0);
     }
 
+    /**
+     * isLogined 로그인 여부 검증 함수
+     *
+     * @param sessionMember 현재 로그인 중인 멤버
+     * @return 로그인 여부
+     */
     private boolean isLogined(Member sessionMember) {
         return sessionMember != null ? true : false;
     }
 
+    /**
+     * isRoot 관리자 여부 검증 함수
+     *
+     * @param sessionMember 현재 로그인 중인 멤버
+     * @return 관리자 여부
+     */
     private boolean isRoot(Member sessionMember) {
         return (sessionMember != null) && sessionMember.getEmail().contains("admin") ? true : false;
     }
 
+    /**
+     * createMember 입력한 값들로 멤버를 생성하여 반환한다.
+     *
+     * @param sc 스캐너
+     * @return 생성된 멤버
+     */
     private Member createMember(Scanner sc) {
         Member member = new Member();
 
@@ -141,6 +159,12 @@ public class PimController {
         return member;
     }
 
+    /**
+     * updateMember 입력한 값들로 멤버를 수정하여 반환한다.
+     *
+     * @param sc 스캐너
+     * @return 생성된 멤버(실제로는 멤버를 생성하여 반환하지만, 결국 DB에 저장할 때는 같은 ID를 가진 데이터가 이미 있으므로 해당 값의 내용을 변경하게 된다)
+     */
     private Member updateMember(Scanner sc, Member sessionMember) {
         Member member = new Member();
 

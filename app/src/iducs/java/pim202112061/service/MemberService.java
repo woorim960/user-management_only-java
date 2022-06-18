@@ -10,7 +10,7 @@ public interface MemberService<T> {
     //            2. 여러 개의 클래스를 정의한 효과를 기대할 수 있음
     T login(String email, String pw);
     void logout();
-    int postMember(T member); // 등록
+    int postMember(T member) throws Exception; // 등록
     T getMember(T member); // 조회
     int putMember(T member); // 수정
     int deleteMember(T member); // 삭제, 탈퇴

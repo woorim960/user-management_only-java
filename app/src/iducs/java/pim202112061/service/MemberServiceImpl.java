@@ -36,8 +36,11 @@ public class MemberServiceImpl<T> implements MemberService<T> {
     }
 
     @Override
-    public int postMember(T member) {
-        return memberRepository.create(member);
+    public int postMember(T member) throws Exception {
+        T existedMember = this.memberRepository.readByEmail(member); // DB에 입력한 이메일을 가진 유저를 가져온다.
+        if (existedMember != null) // 유저가 존재한다면 등록하지 않고 에러를 발생시킨다.
+            throw new Exception("이미 존재하는 이메일입니다.");
+        return this.memberRepository.create(member);
     }
 
     @Override

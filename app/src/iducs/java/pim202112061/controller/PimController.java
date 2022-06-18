@@ -57,7 +57,14 @@ public class PimController {
                 case 1:
                     msg = "등록";
                     this.member = this.createMember(sc); // 멤버 등록 메서드 실행
-                    this.memberService.postMember(this.member);
+                    try {
+                        // 멤버 등록 중 이메일이 중복된게 존재하면 에러가 발생하여 catch 구문으로 넘어간다.
+                        this.memberService.postMember(this.member);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+
                     this.memberView.printOne(this.member);
                     this.memberView.printMsg(msg + "를 성공했습니다.");
                     break;
@@ -174,7 +181,7 @@ public class PimController {
     private Member createMember(Scanner sc) {
         Member member = new Member();
 
-        member.setId(sc.nextLong()); // Long
+//        member.setId(sc.nextLong()); // 아이디는 기존 DB의 최댓 값의 +1 값이 자동 저장되므로 세팅하지 않는다.
         member.setEmail(sc.next()); // String
         member.setPw(sc.next());
         member.setName(sc.next());

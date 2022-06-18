@@ -19,6 +19,7 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
     public int create(T member) {
         int ret = 0; // 실패
         try {
+            ((Member) member).setId(memberList.size()); // 아이디 번호 자동 증가 기능 (AUTO_INCREMENT)
             memberList.add((T) member); // 형변환
             ret = 1; // 성공
         } catch (Exception e) {

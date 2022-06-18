@@ -1,0 +1,7 @@
+1	admin202112061@induk.ac.kr	1234	1	1	1
+2	hong@induk.ac.kr	1111	hong	01011112222	seoul
+3	ujin@induk.ac.kr	1212	1	1	1
+4	jin@induk.ac.kr	3333	4444	5555	6666
+5	u@induk.ac.kr	u2@induk.ac.kr	pwd	name	phone2
+6	6@induk.ac.kr	pwd6	name6	phone6	address6
+7	1	1	1	1	1

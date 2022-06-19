@@ -99,7 +99,7 @@ public class MemberRepositoryImpl<T> implements MemberRepository<T> {
         try {
             this.memberList = this.memberList.stream()
                     .filter(m -> !((Member) m).getEmail().equals(((Member) member).getEmail()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()); // list 자료형으로 반환해주는 역할
             return 1;
         } catch (Exception e) {
             return 0;

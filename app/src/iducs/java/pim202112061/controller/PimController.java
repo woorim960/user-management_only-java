@@ -75,9 +75,9 @@ public class PimController {
                     this.memberService.saveFile(); // memberdb.txt 에 저장
                     break;
                 case 2: // 로그인;
-                    this.member = (Member) this.memberService.login(
-                            this.tuiView.inputToString("email"),
-                            this.tuiView.inputToString("password"));
+                    String email = this.tuiView.inputToString("email");
+                    String password = this.tuiView.inputToString("password");
+                    this.member = (Member) this.memberService.login(email, password);
                     isLogin = this.isLogined(this.member); // 로그인 여부 검증
                     // isRoot = this.isRoot(this.member); // 관리자 여부 검증
 
@@ -88,7 +88,7 @@ public class PimController {
                     } else
                         this.memberView.printMsg("로그인 정보 확인 바랍니다. "); // View 전달
                     break;
-                case 3: // 정보조회;
+                case 3: // 정보 조회;
                     this.memberView.printHeader();
                     // printOne : 하나의 member 정보 출력
                     this.memberView.printOne(this.memberService.getMember(
@@ -102,6 +102,7 @@ public class PimController {
                         this.memberView.printHeader();
                         this.memberView.printOne(this.member);
                         this.memberView.printMsg("정보수정을 성공했습니다.");
+                        this.memberService.saveFile(); // memberdb.txt 에 저장
                     } else
                         System.out.println("수정에 실패하였습니다.");
                     break;
@@ -202,9 +203,10 @@ public class PimController {
      */
     private Member updateMember(HashMap<String, String> inputtedMember) {
         Member member = new Member();
+        Member sessionMember = ((Member) this.session.get("member"));
 
-//        member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
-        member.setEmail(((Member) this.session.get("member")).getEmail()); // email 변경 불가
+        member.setId(sessionMember.getId()); // id 변경 불가(같은 값으로 설정)
+        member.setEmail(sessionMember.getEmail()); // email 변경 불가
         member.setPw(inputtedMember.get("password"));
         member.setName(inputtedMember.get("name"));
         member.setPhone(inputtedMember.get("phone"));
